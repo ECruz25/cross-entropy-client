@@ -1,11 +1,12 @@
 import React from 'react';
+import InventoryDemand from './components/InventoryDemand';
 import './App.css';
-import ExcelLoader from './components/ExcelLoader';
+import 'antd/dist/antd.css';
 
 function App() {
   return (
     <div className="App">
-      <ExcelLoader></ExcelLoader>
+      <InventoryDemand />
     </div>
   );
 }
