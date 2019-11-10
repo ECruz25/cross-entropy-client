@@ -49,7 +49,7 @@ export default ({
         paddingLeft: 30
       }}
     >
-    <div style={{marginBottom:10}}>
+      <div style={{ marginBottom: 10 }}>
         <Title level={4}>Fecha de venta</Title>
         <Select
           defaultValue={dateVariable}
@@ -69,7 +69,7 @@ export default ({
             ))}
         </Select>
       </div>
-      <div style={{marginBottom:10}}>
+      <div style={{ marginBottom: 10 }}>
         <Title level={4}>Identificador de producto</Title>
         <Select
           defaultValue={itemIdVariable}
@@ -89,7 +89,7 @@ export default ({
             ))}
         </Select>
       </div>
-      <div style={{marginBottom:10}}>
+      <div style={{ marginBottom: 10 }}>
         <Title level={4}>Identificador de sucursal</Title>
         <Select
           defaultValue={storeIdVariable}
@@ -109,7 +109,7 @@ export default ({
             ))}
         </Select>
       </div>
-      <div style={{marginBottom:10}}>
+      <div style={{ marginBottom: 10 }}>
         <Title level={4}>Cantidad de ventas</Title>
         <Select
           defaultValue={salesVariable}
@@ -129,9 +129,13 @@ export default ({
             ))}
         </Select>
       </div>
-      <div style={{marginBottom:10}}>
+      <div style={{ marginBottom: 10 }}>
         <Title level={4}>Cantidad de meses a predecir</Title>
-        <InputNumber  min={1} defaultValue={monthsToPredict} onChange={setMonthsToPredict}/>
+        <InputNumber
+          min={1}
+          defaultValue={monthsToPredict}
+          onChange={setMonthsToPredict}
+        />
       </div>
     </div>
   </Modal>
