@@ -1,16 +1,16 @@
-import React, { useState, Fragment, useEffect, useCallback } from 'react';
-import { ExcelRenderer } from 'react-excel-renderer';
-import { Button } from 'antd';
-import ExcelLoaderControl from './ExcelLoaderControl';
-import InventoryDemandVariablePicker from './InventoryDemandVariablePicker';
-import Predicting from './Predicting';
-import moment from 'moment';
+import React, { useState, Fragment, useEffect, useCallback } from "react";
+import { ExcelRenderer } from "react-excel-renderer";
+import { Button } from "antd";
+import ExcelLoaderControl from "./ExcelLoaderControl";
+import InventoryDemandVariablePicker from "./InventoryDemandVariablePicker";
+import Training from "./Training";
+import moment from "moment";
 
 const steps = [
-  { key: 0, name: 'Seleccion de prediccion' },
-  { key: 1, name: 'Seleccion de datos' },
-  { key: 2, name: 'Seleccion de variables' },
-  { key: 3, name: 'Prediccion de demanda' }
+  { key: 0, name: "Seleccion de prediccion" },
+  { key: 1, name: "Seleccion de datos" },
+  { key: 2, name: "Seleccion de variables" },
+  { key: 3, name: "Prediccion de demanda" }
 ];
 
 const modalWidth = 800;
@@ -18,7 +18,7 @@ const modalWidth = 800;
 const getJsDateFromExcel = excelDate => {
   const tryMoment = moment(
     new Date((excelDate - (25567 + 1)) * 86400 * 1000)
-  ).format('L');
+  ).format("L");
   if (!moment(new Date((excelDate - (25567 + 1)) * 86400 * 1000)).isValid()) {
     return excelDate;
   }
@@ -27,10 +27,10 @@ const getJsDateFromExcel = excelDate => {
 
 export default () => {
   const [data, setData] = useState([]);
-  const [dateVariable, setDateVarible] = useState('');
-  const [salesVariable, setSalesVariable] = useState('');
-  const [storeIdVariable, setStoreIdVariable] = useState('');
-  const [itemIdVariable, setItemIdVariable] = useState('');
+  const [dateVariable, setDateVarible] = useState("");
+  const [salesVariable, setSalesVariable] = useState("");
+  const [storeIdVariable, setStoreIdVariable] = useState("");
+  const [itemIdVariable, setItemIdVariable] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
   const [columns, setColumns] = useState([]);
   const [monthsToPredict, setMonthsToPredict] = useState(3);
@@ -39,17 +39,24 @@ export default () => {
   );
   const [isModelTrainingStarted, setIsModelTrainingStarted] = useState(false);
   const [isModelTrainingDone] = useState(false);
+  const [transformedData, setTransformedData] = useState([]);
 
   useEffect(() => {
-    if (dateVariable && currentStep === 3) {
+    if (dateVariable && currentStep === 3 && !isDataTransformationDone) {
       const setDateInData = data.map(row => ({
         ...row,
         date: getJsDateFromExcel(row[dateVariable])
       }));
-      debugger;
       setData(setDateInData);
     }
   }, [currentStep, data, dateVariable]);
+
+  useEffect(() => {
+    if (currentStep === 3 && isModelTrainingStarted) {
+      debugger;
+      handleTrainData();
+    }
+  }, [isModelTrainingStarted]);
 
   useEffect(() => {
     if (data.length > 0) {
@@ -61,6 +68,12 @@ export default () => {
       setColumns(newColumns);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (currentStep === 3 && !isDataTransformationDone) {
+      handleSendDataRecollection();
+    }
+  }, [currentStep, isDataTransformationDone]);
 
   const start = () => {
     setCurrentStep(1);
@@ -102,7 +115,7 @@ export default () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSendDataRecollection = useCallback(async () => {
+  const handleSendDataRecollection = async () => {
     const request = {
       data: data.map(row => ({
         item: row[itemIdVariable],
@@ -110,29 +123,30 @@ export default () => {
         date: row[dateVariable],
         store: row[storeIdVariable]
       })),
-      monthsToPredict
+      monthsToPredict,
+      user: "escruz"
     };
-    await fetch('/api/inventory-demand/data-transformation', {
-      headers: { 'Content-type': 'application/json' },
-      method: 'POST',
+
+    const response = await fetch("/api/inventory-demand/model-training", {
+      headers: { "Content-type": "application/json" },
+      method: "POST",
       body: JSON.stringify(request)
     });
+    const newd = await response.json();
+    debugger;
+    setTransformedData(newd);
     setIsDataTransformationDone(true);
     setIsModelTrainingStarted(true);
-  }, [
-    data,
-    dateVariable,
-    itemIdVariable,
-    monthsToPredict,
-    salesVariable,
-    storeIdVariable
-  ]);
+  };
 
-  useEffect(() => {
-    if (currentStep === 3) {
-      handleSendDataRecollection();
-    }
-  }, [currentStep, handleSendDataRecollection]);
+  const handleTrainData = async () => {
+    const response = await fetch("/api/inventory-demand/model-training", {
+      headers: { "Content-type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({ ...transformedData, user: "escruz" })
+    });
+    debugger;
+  };
 
   const renderSteps = () => {
     switch (currentStep) {
@@ -174,7 +188,7 @@ export default () => {
         );
       case 3:
         return (
-          <Predicting
+          <Training
             columns={columns}
             steps={steps}
             currentStep={currentStep}
