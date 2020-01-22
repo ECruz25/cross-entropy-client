@@ -8,6 +8,7 @@ import "./App.css";
 import "antd/dist/antd.css";
 import withAuth from "./components/HOC/withAuth";
 import TrainedModels from "./components/TrainedModels";
+import Shop from "./components/Shop";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route path="/entrenamientos" exact component={withAuth(Main)} />
+          <Route path="/tienda" exact component={withAuth(Shop)} />
           <Route
             path="/predicciones"
             exact

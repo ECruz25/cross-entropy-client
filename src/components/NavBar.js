@@ -35,6 +35,12 @@ const NavBar = () => {
           Resultados
         </Link>
       </Menu.Item>
+      <Menu.Item key="shop">
+        <Link to="/tienda">
+          <Icon type="shopping-cart" />
+          Tienda
+        </Link>
+      </Menu.Item>
     </Menu>
   );
 };
