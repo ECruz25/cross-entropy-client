@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import Cookie from "js-cookie";
 
 import { Menu, Icon } from "antd";
 
@@ -7,9 +8,26 @@ const { SubMenu } = Menu;
 
 const NavBar = () => {
   const [currentTab, setCurrentTab] = useState();
+  const [credits, setCredits] = useState();
+
+  useEffect(() => {
+    getCredits();
+  }, [currentTab]);
 
   const handleClick = ({ key }) => {
     setCurrentTab(key);
+  };
+
+  const getCredits = async () => {
+    const username = Cookie.get("user") || null;
+    if (username) {
+      const response = await fetch(`/api/credit-by-user/${username}`);
+      const data = await response.json();
+      setCredits(data);
+    }
+    if (!username) {
+      setCredits(0);
+    }
   };
 
   return (
@@ -41,6 +59,7 @@ const NavBar = () => {
           Tienda
         </Link>
       </Menu.Item>
+      <Menu.Item>{credits} Creditos</Menu.Item>
     </Menu>
   );
 };

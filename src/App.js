@@ -9,6 +9,7 @@ import "antd/dist/antd.css";
 import withAuth from "./components/HOC/withAuth";
 import TrainedModels from "./components/TrainedModels";
 import Shop from "./components/Shop";
+import Results from "./components/Results";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             component={withAuth(TrainedModels)}
           />
           <Route path="/login" exact component={Login} />
+          <Route path="/resultados" exact component={withAuth(Results)} />
           <Route
             path="/entrenamientos/demanda-de-inventario"
             component={withAuth(InventoryDemand)}

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
-import Cookie from 'js-cookie';
+import React, { Component } from "react";
+import { Form, Icon, Input, Button } from "antd";
+import Cookie from "js-cookie";
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -17,24 +17,25 @@ class HorizontalLoginForm extends React.Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         try {
-          const response = await fetch('/auth', {
-            method: 'POST',
+          const response = await fetch("/auth", {
+            method: "POST",
             body: JSON.stringify(values),
             headers: {
-              'Content-Type': 'application/json'
+              "Content-Type": "application/json"
             }
           });
           const token = await response.json();
           if (response.status === 200) {
-            this.props.history.push('/');
-            Cookie.set('token', token.access_token);
+            this.props.history.push("/");
+            Cookie.set("token", token.access_token);
+            Cookie.set("user", values.username);
           } else {
             const error = new Error(response.error);
             throw error;
           }
         } catch (error) {
           console.error(err);
-          alert('Error logging in please try again');
+          alert("Error logging in please try again");
         }
       }
     });
@@ -49,33 +50,40 @@ class HorizontalLoginForm extends React.Component {
     } = this.props.form;
 
     const usernameError =
-      isFieldTouched('username') && getFieldError('username');
+      isFieldTouched("username") && getFieldError("username");
     const passwordError =
-      isFieldTouched('password') && getFieldError('password');
+      isFieldTouched("password") && getFieldError("password");
     return (
-      <Form layout="inline" onSubmit={this.handleSubmit}>
+      <Form
+        layout="inline"
+        onSubmit={this.handleSubmit}
+        style={{
+          display: "grid",
+          marginTop: 50
+        }}
+      >
         <Form.Item
-          validateStatus={usernameError ? 'error' : ''}
-          help={usernameError || ''}
+          validateStatus={usernameError ? "error" : ""}
+          help={usernameError || ""}
         >
-          {getFieldDecorator('username', {
-            rules: [{ required: true, message: 'Please input your username!' }]
+          {getFieldDecorator("username", {
+            rules: [{ required: true, message: "Please input your username!" }]
           })(
             <Input
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="Username"
             />
           )}
         </Form.Item>
         <Form.Item
-          validateStatus={passwordError ? 'error' : ''}
-          help={passwordError || ''}
+          validateStatus={passwordError ? "error" : ""}
+          help={passwordError || ""}
         >
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }]
+          {getFieldDecorator("password", {
+            rules: [{ required: true, message: "Please input your Password!" }]
           })(
             <Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
               type="password"
               placeholder="Password"
             />
@@ -95,7 +103,7 @@ class HorizontalLoginForm extends React.Component {
   }
 }
 
-const WrappedHorizontalLoginForm = Form.create({ name: 'horizontal_login' })(
+const WrappedHorizontalLoginForm = Form.create({ name: "horizontal_login" })(
   HorizontalLoginForm
 );
 

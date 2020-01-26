@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, Icon } from "antd";
+import { Card, Icon, Spin } from "antd";
 import moment from "moment";
+import InventoryDemandResult from "./InventoryDemandResult";
 
 export default () => {
   const [trainedModels, setTrainedModels] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowingResults, setIsShowingResults] = useState(false);
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
+
   useEffect(() => {
     loadTrainedModels();
   }, []);
@@ -12,7 +19,7 @@ export default () => {
   const loadTrainedModels = async () => {
     const response = await fetch("/api/trained_models/escruz");
     const data = await response.json();
-    debugger;
+    setIsLoading(false);
     setTrainedModels(data);
   };
 
@@ -20,20 +27,6 @@ export default () => {
     return `${moment().date(date)}/${moment().month(date)}/${moment().year(
       date
     )}`;
-  };
-
-  const predict = async modelName => {
-    const request = {
-      model: modelName,
-      user: "escruz"
-    };
-    await fetch("api/predict", {
-      method: "POST",
-      body: JSON.stringify(request),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
   };
 
   return (
@@ -54,7 +47,9 @@ export default () => {
               <Icon
                 type="fund"
                 key="predecir"
-                onClick={() => predict(m.type)}
+                onClick={() => {
+                  setIsShowingResults(true);
+                }}
               />
             ]}
           >
@@ -68,6 +63,18 @@ export default () => {
           </Card>
         </Link>
       ))}
+      {isLoading && (
+        <div style={{ margin: "50%", justifySelf: "center" }}>
+          <Spin></Spin>
+        </div>
+      )}
+      {isShowingResults && (
+        <InventoryDemandResult
+          onCancel={() => {
+            setIsShowingResults(false);
+          }}
+        ></InventoryDemandResult>
+      )}
     </div>
   );
 };
