@@ -49,7 +49,7 @@ export default () => {
       }));
       setData(setDateInData);
     }
-  }, [currentStep, data, dateVariable]);
+  }, [currentStep, dateVariable]);
 
   useEffect(() => {
     if (currentStep === 3 && isModelTrainingStarted) {
