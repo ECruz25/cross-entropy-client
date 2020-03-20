@@ -56,7 +56,7 @@ export default function SignUp({ history }) {
       setSignUpError('Compañía creada');
       setShowLoginError(true);
       setIsError(true);
-      // history.push('/sign-in');
+      history.push('/sign-in');
     } else {
       setSignUpError(`${response.status}: ${response.statusText}`);
       setShowLoginError(true);

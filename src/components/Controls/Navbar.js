@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 export default function SimpleBottomNavigation() {
   const classes = useStyles();
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(0);
 
   return (
     <BottomNavigation

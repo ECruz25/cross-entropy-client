@@ -79,6 +79,7 @@ export default function SignIn({ history }) {
       setUser(user);
       Cookie.set('token', token.access_token);
       Cookie.set('user', formValues.email);
+      history.push('/entrenamientos');
     } else {
       setSignInError(token.description);
       setShowLoginError(true);
@@ -133,7 +134,7 @@ export default function SignIn({ history }) {
         </Button>
         <Grid container justify="flex-end">
           <Link href="sign-up" variant="body2">
-            {"Don't have an account? Sign Up"}
+            {'No tienes cuenta? Crea una.'}
           </Link>
         </Grid>
       </form>
