@@ -1,13 +1,22 @@
 import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Select from "@material-ui/core/Select";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -32,6 +41,9 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp({ history }) {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({});
+  const [showLoginError, setShowLoginError] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [signUpError, setSignUpError] = useState("");
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -40,9 +52,15 @@ export default function SignUp({ history }) {
       method: "POST",
       body: JSON.stringify(formValues)
     });
-    if (response.status === 202) {
-      window.alert("Company associated");
+    if (response.status == 202) {
+      setSignUpError("Compañía creada");
+      setShowLoginError(true);
+      setIsError(true);
       history.push("/sign-in");
+    } else {
+      setSignUpError(`${response.status}: ${response.statusText}`);
+      setShowLoginError(true);
+      setIsError(true);
     }
   };
 
@@ -160,6 +178,22 @@ export default function SignUp({ history }) {
           </Grid>
         </Grid>
       </form>
+      <Snackbar
+        open={showLoginError}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShowLoginError(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setShowLoginError(false);
+          }}
+          severity={isError ? "error" : "success"}
+        >
+          {signUpError}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

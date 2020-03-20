@@ -1,25 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Card, Typography, CardContent, CardActions } from "@material-ui/core";
-import useCardStyles from "../../Styles/Card";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card, Typography, CardContent, CardActions } from '@material-ui/core';
+import useCardStyles from '../../Styles/Card';
 
 export default function Main() {
   const classes = useCardStyles();
 
   const modules = [
     {
-      name: "Demanda de Inventario",
-      link: "/entrenamientos/demanda-de-inventario",
+      name: 'Demanda de Inventario',
+      link: '/entrenamientos/demanda-de-inventario',
       description:
-        "Predice tus ventas a del siguiente dia, semana, mes, trimestre o año. "
+        'Predice tus ventas del siguiente dia, semana, mes, trimestre o año. '
     }
   ];
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        margin: "10px 20px"
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        margin: '10px 20px'
       }}
     >
       {modules.map(m => (

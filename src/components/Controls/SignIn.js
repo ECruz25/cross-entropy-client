@@ -4,11 +4,17 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Cookie from "js-cookie";
 import UserContext from "../Context/UserContext";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -33,6 +39,8 @@ const useStyles = makeStyles(theme => ({
 export default function SignIn({ history }) {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({});
+  const [showLoginError, setShowLoginError] = useState(false);
+  const [signInError, setSignInError] = useState("");
   const { setUser } = useContext(UserContext);
 
   const onChange = (field, value) => {
@@ -71,11 +79,10 @@ export default function SignIn({ history }) {
       setUser(user);
       Cookie.set("token", token.access_token);
       Cookie.set("user", formValues.email);
+      history.push("/entrenamientos");
     } else {
-      window.alert(token.description);
-    }
-    if (response.status === 202) {
-      window.alert("Company associated");
+      setSignInError(token.description);
+      setShowLoginError(true);
     }
   };
 
@@ -127,10 +134,26 @@ export default function SignIn({ history }) {
         </Button>
         <Grid container justify="flex-end">
           <Link href="sign-up" variant="body2">
-            {"Don't have an account? Sign Up"}
+            {"No tienes cuenta? Crea una."}
           </Link>
         </Grid>
       </form>
+      <Snackbar
+        open={showLoginError}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShowLoginError(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setShowLoginError(false);
+          }}
+          severity="error"
+        >
+          {signInError}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
