@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import { RestoreIcon, BarChart, DonutLarge } from "@material-ui/icons";
-import SettingsIcon from "@material-ui/icons/Settings";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { BarChart, MultilineChart } from '@material-ui/icons';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
-    width: "100%"
+    width: '100%'
   }
 });
 
@@ -27,15 +27,9 @@ export default function SimpleBottomNavigation() {
     >
       <BottomNavigationAction
         label="Modelos"
-        icon={<DonutLarge />}
+        icon={<MultilineChart />}
         component={Link}
         to="/entrenamientos"
-      />
-      <BottomNavigationAction
-        label="Predicciones"
-        icon={<BarChart />}
-        component={Link}
-        to="/predicciones"
       />
       <BottomNavigationAction
         label="Resultados"

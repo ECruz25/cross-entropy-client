@@ -1,30 +1,36 @@
-import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Select from "@material-ui/core/Select";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Select from '@material-ui/core/Select';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center"
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3)
   },
   submit: {
@@ -35,17 +41,26 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp({ history }) {
   const classes = useStyles();
   const [formValues, setFormValues] = useState({});
+  const [showLoginError, setShowLoginError] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [signUpError, setSignUpError] = useState('');
 
   const onSubmit = async e => {
     e.preventDefault();
-    const response = await fetch("/api/v1/sign-up", {
-      headers: { "Content-type": "application/json" },
-      method: "POST",
+    const response = await fetch('/api/v1/sign-up', {
+      headers: { 'Content-type': 'application/json' },
+      method: 'POST',
       body: JSON.stringify(formValues)
     });
     if (response.status == 202) {
-      window.alert("Company associated");
-      history.push("/sign-in");
+      setSignUpError('Compañía creada');
+      setShowLoginError(true);
+      setIsError(true);
+      // history.push('/sign-in');
+    } else {
+      setSignUpError(`${response.status}: ${response.statusText}`);
+      setShowLoginError(true);
+      setIsError(true);
     }
   };
 
@@ -142,7 +157,7 @@ export default function SignUp({ history }) {
               value={formValues.country}
             >
               <option aria-label="None" value="" />
-              <option value={"Honduras"}>Honduras</option>
+              <option value={'Honduras'}>Honduras</option>
             </Select>
           </Grid>
         </Grid>
@@ -163,6 +178,22 @@ export default function SignUp({ history }) {
           </Grid>
         </Grid>
       </form>
+      <Snackbar
+        open={showLoginError}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShowLoginError(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setShowLoginError(false);
+          }}
+          severity={isError ? 'error' : 'success'}
+        >
+          {signUpError}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
