@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { RestoreIcon, BarChart, DonutLarge } from "@material-ui/icons";
+import { BarChart } from "@material-ui/icons";
 import {
   Card,
-  Icon,
   CircularProgress,
   CardActions,
   IconButton,
@@ -13,7 +11,6 @@ import {
   Typography,
   Grid
 } from "@material-ui/core";
-import { ShowChart } from "@material-ui/icons";
 import moment from "moment";
 import InventoryDemandResult from "./Training/InventoryDemand/InventoryDemandResult";
 import useCardStyles from "../Styles/Card";

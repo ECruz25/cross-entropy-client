@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect, useCallback } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { ExcelRenderer } from "react-excel-renderer";
 import { Button } from "antd";
 import ExcelLoaderControl from "../../Controls/ExcelLoaderControl";
@@ -59,9 +59,6 @@ export default () => {
 
   useEffect(() => {
     if (data.length > 0) {
-      console.log(Object.keys(data[0]));
-      var tr = Object.keys(data[0]);
-      debugger;
       setColumns(Object.keys(data[0]));
     }
   }, [data]);

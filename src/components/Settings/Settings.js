@@ -1,20 +1,14 @@
 import React, { useContext, useState } from "react";
-import { Paper, MenuList, MenuItem, Grid, Drawer } from "@material-ui/core";
+import { Grid, Drawer } from "@material-ui/core";
 import UserContext from "../Context/UserContext";
 import CreateUserForm from "./CreateUserForm";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
 import { PersonAdd, AccountBox, Payment } from "@material-ui/icons";
-import MailIcon from "@material-ui/icons/Mail";
 import Users from "./Users";
 
 const drawerWidth = 240;

@@ -54,7 +54,7 @@ export default function CreateUserForm({ companyUser }) {
     } else {
       window.alert(token.description);
     }
-    if (response.status == 202) {
+    if (response.status === 202) {
       window.alert("User Created");
     }
   };

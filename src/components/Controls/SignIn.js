@@ -74,7 +74,7 @@ export default function SignIn({ history }) {
     } else {
       window.alert(token.description);
     }
-    if (response.status == 202) {
+    if (response.status === 202) {
       window.alert("Company associated");
     }
   };

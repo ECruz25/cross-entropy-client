@@ -16,6 +16,6 @@ export default function Users({ companyUser }) {
       setUsers(usersData);
     }
     fetchUsers();
-  }, []);
+  }, [companyUser.id]);
   return <Table columns={["email", "type"]} data={users}></Table>;
 }

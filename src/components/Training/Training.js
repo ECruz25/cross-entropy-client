@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Card, Spin, Progress } from "antd";
+import { Modal, Card } from "antd";
 import { CircularProgress, Fab } from "@material-ui/core";
 import { Check } from "@material-ui/icons";
 
