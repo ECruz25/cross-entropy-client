@@ -15,6 +15,7 @@ import moment from "moment";
 import InventoryDemandResult from "./Training/InventoryDemand/InventoryDemandResult";
 import useCardStyles from "../Styles/Card";
 import useGridStyles from "../Styles/Card";
+import Cookie from "js-cookie";
 
 export default () => {
   const cardClasses = useCardStyles();
@@ -32,7 +33,9 @@ export default () => {
   }, []);
 
   const loadTrainedModels = async () => {
-    const response = await fetch("/api/v1/trained_models/escruz");
+    const email = await Cookie.get("user");
+
+    const response = await fetch(`/api/v1/trained_models/${email}`);
     const data = await response.json();
     setIsLoading(false);
     setTrainedModels(data);

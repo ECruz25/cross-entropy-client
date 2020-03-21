@@ -69,9 +69,6 @@ export default function App() {
             </UserProvider>
           </Switch>
         </Container>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
       </Router>
     </ThemeProvider>
   );

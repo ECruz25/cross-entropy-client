@@ -18,15 +18,7 @@ export default ({ onCancel, onOk, model }) => {
   }, [model._id]);
 
   return (
-    <Modal
-      visible
-      onOk={onOk}
-      onCancel={onCancel}
-      centered
-      okText="Siguiente"
-      cancelText="Cancelar"
-      closable={false}
-    >
+    <Modal visible onOk={onCancel} onCancel={onCancel} centered okText="Ok  ">
       <TableControl data={data} columns={columns} rowsPerPage={5} />
     </Modal>
   );

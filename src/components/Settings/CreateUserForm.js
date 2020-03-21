@@ -7,7 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Select } from "@material-ui/core";
+import { Select, Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -28,9 +29,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function CreateUserForm({ companyUser }) {
-  const [user, setUser] = useState({});
+export default function CreateUserForm({ companyUser, history }) {
+  const [user, setUser] = useState({
+    type: "Admin"
+  });
   const classes = useStyles();
+  const [showLoginError, setShowLoginError] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [signUpError, setSignUpError] = useState("");
 
   const onChange = (field, value) => {
     const newUser = {
@@ -49,13 +55,17 @@ export default function CreateUserForm({ companyUser }) {
         "Content-Type": "application/json"
       }
     });
-    const token = await response.json();
+    debugger;
+
     if (response.status === 200) {
+    } else if (response.status === 202) {
+      setSignUpError("Usuario creado");
+      setShowLoginError(true);
+      setIsError(false);
     } else {
-      window.alert(token.description);
-    }
-    if (response.status === 202) {
-      window.alert("User Created");
+      setSignUpError(`${response.status}: ${response.statusText}`);
+      setShowLoginError(true);
+      setIsError(true);
     }
   };
 
@@ -125,12 +135,23 @@ export default function CreateUserForm({ companyUser }) {
         >
           Sign In
         </Button>
-        <Grid container justify="flex-end">
-          <Link href="sign-up" variant="body2">
-            {"Don't have an account? Sign Up"}
-          </Link>
-        </Grid>
       </form>
+      <Snackbar
+        open={showLoginError}
+        autoHideDuration={6000}
+        onClose={() => {
+          setShowLoginError(false);
+        }}
+      >
+        <Alert
+          onClose={() => {
+            setShowLoginError(false);
+          }}
+          severity={isError ? "error" : "success"}
+        >
+          {signUpError}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import ExcelLoaderControl from "../../Controls/ExcelLoaderControl";
 import InventoryDemandVariablePicker from "./InventoryDemandVariablePicker";
 import Training from "../Training";
 import moment from "moment";
+import Cookie from "js-cookie";
 
 const steps = [
   { key: 0, name: "Seleccion de prediccion" },
@@ -38,7 +39,7 @@ export default () => {
     false
   );
   const [isModelTrainingStarted, setIsModelTrainingStarted] = useState(false);
-  const [isModelTrainingDone] = useState(false);
+  const [isModelTrainingDone, setIsModelTrainingDone] = useState(false);
   const [transformedData, setTransformedData] = useState([]);
 
   useEffect(() => {
@@ -111,6 +112,8 @@ export default () => {
   };
 
   const handleSendDataRecollection = async () => {
+    const email = await Cookie.get("user");
+
     const request = {
       data: data.map(row => ({
         item: row[itemIdVariable],
@@ -119,7 +122,7 @@ export default () => {
         store: row[storeIdVariable]
       })),
       monthsToPredict,
-      user: "escruz"
+      user: email
     };
 
     const response = await fetch("/api/v1/inventory-demand/model-training", {
@@ -127,19 +130,19 @@ export default () => {
       method: "POST",
       body: JSON.stringify(request)
     });
-    const newd = await response.json();
-    debugger;
-    setTransformedData(newd);
     setIsDataTransformationDone(true);
-    setIsModelTrainingStarted(true);
+    setIsModelTrainingDone(true);
   };
 
   const handleTrainData = async () => {
+    const email = await Cookie.get("user");
     const response = await fetch("/api/v1/inventory-demand/model-training", {
       headers: { "Content-type": "application/json" },
       method: "POST",
-      body: JSON.stringify({ ...transformedData, user: "escruz" })
+      body: JSON.stringify({ ...transformedData, user: email })
     });
+    setIsDataTransformationDone(true);
+    setIsModelTrainingDone(true);
     debugger;
   };
 

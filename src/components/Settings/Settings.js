@@ -10,6 +10,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { PersonAdd, AccountBox, Payment } from "@material-ui/icons";
 import Users from "./Users";
+import Subscription from "./Subscription";
 
 const drawerWidth = 240;
 
@@ -74,6 +75,9 @@ export default function Settings() {
       )}
       {currentOption && currentOption === "Administracion de usuarios" && (
         <Users companyUser={user}></Users>
+      )}
+      {currentOption && currentOption === "Suscripcion" && (
+        <Subscription companyUser={user}></Subscription>
       )}
     </Grid>
   );
